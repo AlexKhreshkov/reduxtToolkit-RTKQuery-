@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import './App.css';
 import { useAppDispatch, useAppSelecor } from './hooks/useRedux';
-import { fetchTodos } from './store/todosSlice';
+import { deleteTodo, fetchTodos, toggleTodo } from './store/todosSlice';
 import { ITodo } from './types';
 
 function App() {
@@ -14,6 +14,9 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchTodos())
+
+
+
     // axios.get<ITodo[]>(`https://jsonplaceholder.typicode.com/todosd/`)
     //   .then(response => console.log(response.data))
   }, [])
@@ -28,8 +31,14 @@ function App() {
         <>
           <div className='toods'>
             {todos.map(todo =>
-              <div className='todo'>
-                {todo.id}. {todo.title} <input type={'checkbox'} checked={todo.completed} />
+              <div key={todo.id} className='todo'>
+                {todo.id}. {todo.title}
+                <input
+                  type={'checkbox'}
+                  checked={todo.completed}
+                  onChange={() => dispatch(toggleTodo({ data: { id: todo.id, completed: todo.completed } }))}
+                />
+                delete: <input type='checkbox' onClick={() => dispatch(deleteTodo(todo.id))} />
               </div>
             )}
           </div>
